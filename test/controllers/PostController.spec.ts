@@ -7,7 +7,7 @@ describe('PostController', () => {
     let controller: PostController;
 
     beforeEach(() => {
-        controller = new PostController(new MockPostRepository);
+        controller = new PostController(new MockPostRepository() as any);
     });
 
     it('should be exits.', () => {
@@ -15,7 +15,11 @@ describe('PostController', () => {
     });
 
     it('should fetch all posts.', () => {
-        expect(controller.index()).to.have.lengthOf(0);
+        let result = controller.index();
+        expect(result).to.have.lengthOf(1);
+        expect(result[0]).to.includes.keys([
+            '_id', 'title', 'body', 'type', 'createdAt'
+        ]);
     });
 
 });
