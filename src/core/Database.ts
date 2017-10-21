@@ -10,22 +10,14 @@ export default class Database {
     public url = 'mongodb://localhost:27017/myblog';
 
     constructor() {
+        this.connect();
+    }
+
+    public connect() {
         (mongoose as any).Promise = require('bluebird');
-    }
+        mongoose.connect(this.url, { useMongoClient: true });
 
-    public connect(cb: (error: Error, db: mongoose.Connection) => void) {
-        if (this.isConnected()) {
-            mongoose.connect(this.url, { useMongoClient: true }).then(
-                () => {
-                    this.db = mongoose.connection;
-                    cb(null, mongoose.connection);
-                },
-                (error) => console.error.bind(console, 'connection error:')
-            );
-        }
-    }
-
-    private isConnected() {
-        return mongoose.connection.readyState !== 1;
+        this.db = mongoose.connection;
+        this.db.on('error', console.error.bind(console, 'MongoConnectionError:'));
     }
 }
