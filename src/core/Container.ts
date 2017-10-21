@@ -1,3 +1,4 @@
+import Database from './Database';
 import * as models from '../models';
 import * as controllers from '../controllers';
 import * as repositories from '../repositories';
@@ -6,12 +7,11 @@ import { Container as InversifyContainer } from 'inversify';
 
 export default class Container {
 
-    private _services = { ...repositories, ...models };
+    private _services = { ...repositories, ...models, Database };
 
     constructor(private _container: InversifyContainer) {}
 
     public load() {
-
         this.loadControllers();
         this.loadServices();
 
