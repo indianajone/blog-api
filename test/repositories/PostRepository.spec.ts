@@ -1,4 +1,5 @@
 import { expect } from 'chai';
+import MockPostModel from '../mock/MockPost';
 import { PostRepository } from '../../src/repositories';
 
 describe('PostRepository', () => {
@@ -6,7 +7,7 @@ describe('PostRepository', () => {
     let repo: PostRepository;
 
     beforeEach(() => {
-        repo = new PostRepository();
+        repo = new PostRepository(new MockPostModel() as any);
     });
 
     it('should be exists.', () => {

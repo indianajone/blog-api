@@ -1,3 +1,4 @@
+import * as models from '../models';
 import * as controllers from '../controllers';
 import * as repositories from '../repositories';
 import { interfaces, TYPE } from 'inversify-express-utils';
@@ -5,7 +6,7 @@ import { Container as InversifyContainer } from 'inversify';
 
 export default class Container {
 
-    private _services = { ...repositories };
+    private _services = { ...repositories, ...models };
 
     constructor(private _container: InversifyContainer) {}
 
