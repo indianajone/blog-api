@@ -1,4 +1,5 @@
 import { expect } from 'chai';
+import MockPostRepository from '../mock/MockPostRepository';
 import { PostController } from '../../src/controllers';
 
 describe('PostController', () => {
@@ -6,7 +7,7 @@ describe('PostController', () => {
     let controller: PostController;
 
     beforeEach(() => {
-        controller = new PostController;
+        controller = new PostController(new MockPostRepository);
     });
 
     it('should be exits.', () => {

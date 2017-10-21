@@ -1,4 +1,5 @@
-import { injectable } from 'inversify';
+import { injectable, inject } from 'inversify';
+import PostRepository from '../repositories/PostRepository';
 import { controller, httpGet } from 'inversify-express-utils';
 
 @injectable()
@@ -7,9 +8,13 @@ export default class PostController {
 
     public static TAG = 'PostController';
 
+    constructor(
+        @inject(PostRepository.TYPE) private repo: PostRepository
+    ) {}
+
     @httpGet('/')
     public index() {
-      return [];
+      return this.repo.all();
     }
 
 }
