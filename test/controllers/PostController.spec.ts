@@ -13,4 +13,8 @@ describe('PostController', () => {
         expect(controller).to.be.exist;
     });
 
+    it('should fetch all posts.', () => {
+        expect(controller.index()).to.have.lengthOf(0);
+    });
+
 });
