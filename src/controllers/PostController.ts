@@ -10,11 +10,15 @@ export default class PostController {
 
     constructor(
         @inject(PostRepository.TYPE) private repo: PostRepository
-    ) {}
+    ) { }
 
     @httpGet('/')
-    public index() {
-      return this.repo.all();
+    public async index() {
+        try {
+            let result = await this.repo.all();
+            return result;
+        } catch (e) {
+            return { error: e.message };
+        }
     }
-
 }

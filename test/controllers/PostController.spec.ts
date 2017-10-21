@@ -14,8 +14,8 @@ describe('PostController', () => {
         expect(controller).to.be.exist;
     });
 
-    it('should fetch all posts.', () => {
-        let result = controller.index();
+    it('should fetch all posts.', async () => {
+        let result = await controller.index();
         expect(result).to.have.lengthOf(1);
         expect(result[0]).to.includes.keys([
             '_id', 'title', 'body', 'type', 'createdAt'
