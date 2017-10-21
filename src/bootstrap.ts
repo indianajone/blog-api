@@ -1,3 +1,4 @@
+import 'reflect-metadata';
 import App from './core/App';
 import Container from './core/Container';
 import { Container as InversifyContainer } from 'inversify';
