@@ -17,7 +17,9 @@ export default class Database {
         (mongoose as any).Promise = require('bluebird');
         mongoose.connect(this.url, { useMongoClient: true });
 
-        this.db = mongoose.connection;
-        this.db.on('error', console.error.bind(console, 'MongoConnectionError:'));
+        if (!this.db) {
+            this.db = mongoose.connection;
+            this.db.on('error', console.error.bind(console, 'MongoConnectionError:'));
+        }
     }
 }
