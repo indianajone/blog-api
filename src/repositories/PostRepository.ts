@@ -1,5 +1,5 @@
-import { Post, IPost, IPostDto } from '../models/Post';
 import { inject, injectable } from 'inversify';
+import { Post, IPost, IPostDto } from '../models/Post';
 
 @injectable()
 export default class PostRepository {

@@ -14,9 +14,24 @@ const postSchema = new Schema({
 
 postSchema.pre('save', function (next) {
     let now = new Date();
+
     if (!this.createdAt) {
         this.createdAt = now;
     }
+
+    if (this.image && !this.image.startsWith('http://')) {
+        this.image = attachHost(this.image);
+    }
+
+
+    function attachHost(path: string) {
+        let { address, port } = require('../bootstrap').server.address();
+        if (!address || address === '::') {
+            address = 'http://localhost';
+        }
+        return `${address}:${port}/${path.replace('uploads', 'images')}`;
+    }
+
     next();
 });
 

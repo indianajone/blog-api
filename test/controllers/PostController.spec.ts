@@ -1,4 +1,6 @@
+import * as fs from 'fs';
 import * as chai from 'chai';
+import * as path from 'path';
 import chaiHttp = require('chai-http');
 import { Post, IPost } from '../../src/models/Post';
 import { app, container } from '../../src/bootstrap';
@@ -36,14 +38,27 @@ describe('PostController', () => {
         );
     });
 
-    it('should create a post.', (done) => {
+    it('should create a post.', async () => {
         client.post('/posts')
             .send(dummyPost)
             .end((error, response) => {
                 expect(response.status).to.be.equals(201);
-                done();
+                expect(response.body.data.title).to.be.equals(dummyPost.title);
             }
         );
+    });
+
+    it('should create a post with image.', () => {
+        let imagePath = path.join(__dirname, '../mock/image.jpg');
+
+        client.post('/posts')
+            .field('title', dummyPost.title)
+            .field('body', dummyPost.body)
+            .attach('image', fs.readFileSync(imagePath), 'image.jpg')
+            .end((error, response) => {
+                expect(response.status).to.be.equals(201);
+                expect(response.body.data.image).to.be.exist;
+            });
     });
 
     it('should fetch a post by id.', async () => {
