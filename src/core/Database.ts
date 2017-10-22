@@ -7,7 +7,7 @@ export default class Database {
     public static TYPE = Symbol('Database');
 
     public db: mongoose.Connection;
-    public url = 'mongodb://localhost:27017/myblog';
+    public url = process.env.MONGO_URL || 'mongodb://localhost:27017/myblog';
 
     constructor() {
         this.connect();
