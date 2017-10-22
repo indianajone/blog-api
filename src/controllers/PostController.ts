@@ -24,12 +24,15 @@ export default class PostController {
     ) { }
 
     @httpGet('/')
-    public async index() {
+    public async index(
+        @request() request: Request,
+        @response() response: Response
+    ) {
         try {
-            let result = await this.repo.all();
-            return result;
+            let posts = await this.repo.all();
+            response.json({ data: posts });
         } catch (e) {
-            return { error: e.message };
+            response.status(400).json({ error: e.message });
         }
     }
 
@@ -40,8 +43,8 @@ export default class PostController {
         ) {
         try {
             if (request.file) {
-                request.body.image = request.file.path;
                 request.body.type = 'image';
+                request.body.image = request.file.path;
             }
             let post = await this.repo.create(request.body);
             response.status(201).json({ data: post });
@@ -56,21 +59,25 @@ export default class PostController {
         @response() response: Response
         ) {
         try {
-            let data = await this.repo.find(request.params.id);
-            response.json({ data });
+            let post = await this.repo.find(request.params.id);
+            response.json({ data: post });
         } catch (e) {
             response.status(400).json({ error: e.message });
         }
     }
 
-    @httpPut('/:id')
+    @httpPut('/:id', upload.single('image'))
     public async update(
         @request() request: Request,
         @response() response: Response
         ) {
         try {
-            await this.repo.update(request.params.id, request.body);
-            response.status(200).json({ message: 'Post has been updated!' });
+            if (request.file) {
+                request.body.type = 'image';
+                request.body.image = request.file.path;
+            }
+            let post = await this.repo.update(request.params.id, request.body);
+            response.json({ data: post });
         } catch (e) {
             response.status(400).json({ error: e.message });
         }

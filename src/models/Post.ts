@@ -56,16 +56,14 @@ export class Post {
 
     public updateById(id: string, post: IPostDto) {
         return new Promise((resolve, reject) => {
-            this.model.findById(id).then(old => {
-                Object.assign(old, post).save(
-                    (error, newPost) => {
-                        if (error) {
-                            reject(error);
-                        }
-                        resolve(newPost);
+            this.model.findByIdAndUpdate(
+                id, { $set: post }, { new: true}, (error, updated) => {
+                    if (error) {
+                        reject(error);
                     }
-                );
-            }, reject);
+                    resolve(updated);
+                }
+            );
         });
     }
 
