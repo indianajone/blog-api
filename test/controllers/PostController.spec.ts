@@ -1,25 +1,24 @@
-import { expect } from 'chai';
-import MockPostRepository from '../mock/MockPostRepository';
-import { PostController } from '../../src/controllers';
+import * as chai from 'chai';
+import chaiHttp = require('chai-http');
+import { app } from '../../src/bootstrap';
+
+chai.use(chaiHttp);
+const expect = chai.expect;
 
 describe('PostController', () => {
 
-    let controller: PostController;
+    let client: ChaiHttp.Agent;
 
-    beforeEach(() => {
-        controller = new PostController(new MockPostRepository() as any);
+    before(() => {
+        client = chai.request(app);
     });
 
-    it('should be exits.', () => {
-        expect(controller).to.be.exist;
-    });
-
-    it('should fetch all posts.', async () => {
-        let result = await controller.index();
-        expect(result).to.have.lengthOf(1);
-        expect(result[0]).to.includes.keys([
-            '_id', 'title', 'body', 'type', 'createdAt'
-        ]);
+    it('should fetch all posts.', (done) => {
+        client.get('/posts').end((error, response) => {
+            expect(response.status).to.be.equals(200);
+            expect(response.body).to.have.lengthOf(0);
+            done();
+        });
     });
 
 });
